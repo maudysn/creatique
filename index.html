@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CREATIQUE - AI-powered digital marketing text reviewer based on pragmatics.">
+    <title>CREATIQUE | Create Beyond Words</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">CREATIQUE<span>.</span></div>
+        <p class="tagline">CREATE BEYOND WORDS</p>
+    </header>
+
+    <main>
+        <section class="hero">
+            <p class="eyebrow">AI-POWERED LANGUAGE ANALYSIS</p>
+            <h1>Every word has <span>meaning.</span></h1>
+            <p>
+                Analyze, evaluate, and refine your digital marketing
+                communication through the lens of pragmatics.
+            </p>
+            <a href="#analyzer" class="primary-button">Start Analyzing</a>
+        </section>
+
+        <section class="analyzer" id="analyzer">
+            <h2>Text Analyzer</h2>
+            <p>Let's understand the meaning behind your marketing message.</p>
+
+            <form id="analysisForm">
+                <label for="marketingText">Marketing Text</label>
+                <textarea id="marketingText" placeholder="Paste your marketing text here..." required></textarea>
+
+                <label for="product">Product or Service</label>
+                <input type="text" id="product" placeholder="Describe your product or service">
+
+                <label for="brand">Brand Characteristics</label>
+                <input type="text" id="brand" placeholder="e.g. Elegant, friendly, professional">
+
+                <label for="audience">Target Audience</label>
+                <input type="text" id="audience" placeholder="Who is your audience?">
+
+                <label for="platform">Publication Platform</label>
+                <select id="platform">
+                    <option value="">Choose a platform</option>
+                    <option>Instagram</option>
+                    <option>TikTok</option>
+                    <option>Website</option>
+                    <option>Email</option>
+                    <option>Online Marketplace</option>
+                    <option>Other</option>
+                </select>
+
+                <label for="goal">Marketing Objective</label>
+                <select id="goal">
+                    <option value="">Choose an objective</option>
+                    <option>Informing</option>
+                    <option>Promoting</option>
+                    <option>Persuading</option>
+                    <option>Building Brand Awareness</option>
+                    <option>Encouraging Purchase</option>
+                </select>
+
+                <button type="submit" class="primary-button">
+                    Analyze My Text
+                </button>
+            </form>
+
+            <div id="result" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <footer>
+        <h3>CREATIQUE</h3>
+        <p>Create Beyond Words</p>
+        <p>Where language meets meaning.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
