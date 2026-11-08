@@ -434,120 +434,7 @@ form.addEventListener("submit", async function (event) {
       throw new Error(data.error || t.error);
     }
 
-    const highlights = Array.isArray(data.pragmaticHighlights)
-  ? data.pragmaticHighlights
-  : [];
-
-const interpretations = Array.isArray(data.audienceInterpretations)
-  ? data.audienceInterpretations
-  : [];
-
-const categoryNames = {
-  speech_act: "Tindak Tutur",
-  implicature: "Implikatur",
-  presupposition: "Praanggapan",
-  politeness: "Kesantunan Berbahasa"
-};
-
-const highlightHTML = highlights.length
-  ? highlights.map((item, index) => {
-      const category = categoryNames[item.category] || item.category || "Pragmatik";
-
-      return `
-        <details class="highlight-card">
-          <summary>
-            <span class="highlight-number">${index + 1}</span>
-            <span class="highlight-quote">"${escapeHTML(item.quote || "")}"</span>
-            <span class="category-badge">${escapeHTML(category)}</span>
-          </summary>
-
-          <div class="highlight-explanation">
-            <h4>Penjelasan Linguistik</h4>
-            <p>${escapeHTML(item.explanation || "-")}</p>
-
-            <h4>Fungsi Komunikatif</h4>
-            <p>${escapeHTML(item.function || "-")}</p>
-          </div>
-        </details>
-      `;
-    }).join("")
-  : "<p>Belum ditemukan bukti pragmatik yang cukup kuat.</p>";
-
-const audienceHTML = interpretations.length
-  ? interpretations.map(item => `
-      <article class="audience-card">
-        <h3>${escapeHTML(item.audience || "Audiens")}</h3>
-
-        <div class="audience-item">
-          <h4>Makna Tersurat</h4>
-          <p>${escapeHTML(item.explicitMeaning || "-")}</p>
-        </div>
-
-        <div class="audience-item">
-          <h4>Makna Tersirat</h4>
-          <p>${escapeHTML(item.impliedMeaning || "-")}</p>
-        </div>
-
-        <div class="audience-item">
-          <h4>Kemungkinan Respons</h4>
-          <p>${escapeHTML(item.possibleResponse || "-")}</p>
-        </div>
-
-        <div class="audience-item">
-          <h4>Potensi Salah Tafsir</h4>
-          <p>${escapeHTML(item.interpretationRisk || "-")}</p>
-        </div>
-      </article>
-    `).join("")
-  : "<p>Belum tersedia interpretasi audiens.</p>";
-
-result.innerHTML = `
-  <h2>${t.result}</h2>
-
-  <div class="analysis-content">
-    ${escapeHTML(data.analysis || "").replace(/\n/g, "<br>")}
-  </div>
-
-  <section class="feature-section">
-    <div class="feature-heading">
-      <span class="feature-label">01 / LINGUISTIC EVIDENCE</span>
-      <h2>Pragmatic Highlight</h2>
-      <p>
-        Temukan bukti penggunaan bahasa dan fenomena
-        pragmatik dalam teks pemasaran.
-      </p>
-    </div>
-
-    <div class="highlight-list">
-      ${highlightHTML}
-    </div>
-  </section>
-
-  <section class="feature-section">
-    <div class="feature-heading">
-      <span class="feature-label">02 / AUDIENCE PERSPECTIVE</span>
-      <h2>Audience Interpretation</h2>
-      <p>
-        Pelajari kemungkinan cara audiens memahami
-        pesan pemasaran.
-      </p>
-    </div>
-
-    <div class="audience-grid">
-      ${audienceHTML}
-    </div>
-  </section>
-`;
-
-result.dataset.hasResult = "true";
-
-} catch (error) {
-  result.innerHTML = `
-    <p>${t.error}</p>
-    <p>${escapeHTML(error.message)}</p>
-  `;
-}
-});
+    result.innerHTML = `
       <h2>${t.result}</h2>
       <div class="analysis-content">${escapeHTML(data.analysis).replace(/\n/g, "<br>")}</div>
     `;
@@ -570,4 +457,4 @@ function escapeHTML(text) {
     '"': "&quot;",
     "'": "&#039;"
   })[character]);
-                }
+    }
