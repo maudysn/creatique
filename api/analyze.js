@@ -47,22 +47,13 @@ module.exports = async function handler(req, res) {
       languageNames[outputLanguage] || "Bahasa Indonesia";
 
     const prompt = `
-You are CREATIQUE, an AI-powered digital marketing text reviewer
-specializing in pragmatics and linguistic analysis.
+You are CREATIQUE, an AI-powered digital marketing
+text reviewer specializing in pragmatics and linguistics.
 
-IMPORTANT LANGUAGE INSTRUCTION:
-Write the entire analysis in ${selectedLanguage}.
-Use natural, grammatically correct, professional language.
-Do not switch to another language unless quoting the original marketing text.
-Keep original linguistic examples exactly as written.
-
-IMPORTANT ANALYSIS INSTRUCTION:
-Analyze the original language of the marketing text.
-Do not simply translate the text and analyze the translation.
-Consider the linguistic, cultural, and pragmatic characteristics
-of the original language.
-Do not apply politeness standards from one language directly
-to another language without justification.
+OUTPUT LANGUAGE:
+Write all explanations in ${selectedLanguage}.
+Keep original marketing text quotations unchanged.
+Keep revised marketing text in its original language.
 
 MARKETING TEXT:
 ${marketingText}
@@ -82,50 +73,113 @@ ${platform || "Not specified"}
 MARKETING OBJECTIVE:
 ${goal || "Not specified"}
 
-Provide the analysis using the following structure:
+YOUR TASK:
 
-1. GENERAL OVERVIEW
-Explain the overall impression, communicative function,
-and intended meaning of the marketing text.
+Analyze the marketing text using pragmatic and
+linguistic principles.
 
-2. PRAGMATIC ANALYSIS
+Do not invent linguistic evidence.
+Do not force pragmatic categories when they are absent.
+Distinguish explicit meaning from inferred meaning.
+Consider the original language and cultural context.
 
-A. Speech Acts
-Identify the speech acts and explain their communicative functions.
+Return ONLY a valid JSON object.
+Do not use Markdown code fences.
 
-B. Implicature
-Identify implied meanings and explain how the audience
-may interpret them.
+Use exactly this structure:
 
-C. Presupposition
-Identify assumptions embedded in the text and explain their role.
+{
+  "overview": {
+    "impression": "Overall impression of the text",
+    "communicativeFunction": "Main communicative function",
+    "intendedMeaning": "Intended message"
+  },
 
-D. Linguistic Politeness
-Analyze politeness strategies and their appropriateness
-for the original language and context.
+  "pragmaticAnalysis": {
+    "speechActs": "Analysis of speech acts",
+    "implicature": "Analysis of implicature",
+    "presupposition": "Analysis of presupposition",
+    "politeness": "Analysis of linguistic politeness"
+  },
 
-For every aspect, provide direct evidence from the original text
-and explain the linguistic reasoning.
-Do not force findings when an aspect is not clearly present.
+  "pragmaticHighlights": [
+    {
+      "quote": "Exact quotation from original text",
+      "category": "speech_act",
+      "explanation": "Linguistic explanation",
+      "function": "Communicative function"
+    }
+  ],
 
-3. CONTEXTUAL APPROPRIATENESS
-Evaluate the compatibility of the text with the brand,
-target audience, publication platform, and marketing objective.
+  "audienceInterpretations": [
+    {
+      "audience": "Audience perspective",
+      "explicitMeaning": "Possible explicit interpretation",
+      "impliedMeaning": "Possible implied interpretation",
+      "possibleResponse": "Possible audience response",
+      "interpretationRisk": "Potential misunderstanding or risk"
+    }
+  ],
 
-4. TEXT STRENGTHS
-Explain the effective linguistic elements and why they work.
+  "contextualAppropriateness": {
+    "brandFit": "Compatibility with brand identity",
+    "audienceFit": "Compatibility with target audience",
+    "platformFit": "Compatibility with publication platform",
+    "goalFit": "Compatibility with marketing objective"
+  },
 
-5. IMPROVEMENT SUGGESTIONS
-Provide specific and practical recommendations.
+  "textStrengths": [
+    "Strength of the original text"
+  ],
 
-6. REVISED TEXT
-Create one improved version of the marketing text.
-Keep the original language of the marketing text.
-Explain why the revision is pragmatically more appropriate.
+  "improvementSuggestions": [
+    "Specific improvement suggestion"
+  ],
 
-Use clear, professional, and accessible language.
-Do not invent information that is not provided.
-Distinguish linguistic evidence from interpretation.
+  "revisedText": {
+    "text": "One improved version in the original language",
+    "explanation": "Explanation of linguistic improvements"
+  }
+}
+
+RULES FOR PRAGMATIC HIGHLIGHTS:
+
+1. Identify actual phrases or sentences from the original text.
+2. Every quote must appear exactly in the original text.
+3. Use these categories:
+   - speech_act
+   - implicature
+   - presupposition
+   - politeness
+4. A single quotation may represent more than one
+   pragmatic phenomenon when justified.
+5. Do not create highlights without sufficient evidence.
+6. Provide 0 to 12 relevant highlights.
+
+RULES FOR AUDIENCE INTERPRETATION:
+
+1. Focus on the target audience provided by the user.
+2. If appropriate, identify 2 to 4 relevant audience
+   perspectives or subgroups.
+3. Explain both explicit and possible implied meanings.
+4. Identify possible responses and interpretation risks.
+5. Do not claim that all members of an audience
+   interpret a message identically.
+6. If the target audience is unspecified, explain
+   the likely interpretation by general consumers.
+
+RULES FOR ANALYSIS:
+
+1. Speech acts must explain the communicative action.
+2. Implicature must explain meaning beyond literal words.
+3. Presupposition must identify assumptions in the text.
+4. Politeness must consider linguistic and cultural context.
+5. All findings must be supported by linguistic evidence.
+6. If a phenomenon is absent, explain that it is not
+   clearly identified instead of inventing an example.
+7. Keep the revised text in the original language.
+
+Return valid JSON only.
 `;
 
     const response = await fetch(
@@ -139,12 +193,15 @@ Distinguish linguistic evidence from interpretation.
         body: JSON.stringify({
           contents: [
             {
-              parts: [{ text: prompt }]
+              parts: [
+                { text: prompt }
+              ]
             }
           ],
           generationConfig: {
             temperature: 0.4,
-            maxOutputTokens: 3000
+            maxOutputTokens: 6000,
+            responseMimeType: "application/json"
           }
         })
       }
@@ -160,20 +217,97 @@ Distinguish linguistic evidence from interpretation.
       });
     }
 
-    const analysis = data.candidates?.[0]?.content?.parts
+    const rawOutput = data.candidates?.[0]?.content?.parts
       ?.map(part => part.text || "")
       .join("\n");
 
-    if (!analysis) {
+    if (!rawOutput) {
       return res.status(502).json({
         error: "AI tidak menghasilkan analisis."
       });
     }
 
-    return res.status(200).json({ analysis });
+    let result;
+
+    try {
+      result = JSON.parse(rawOutput);
+    } catch (parseError) {
+      console.error("JSON parsing error:", rawOutput);
+
+      return res.status(502).json({
+        error: "Format hasil AI tidak valid. Silakan coba kembali."
+      });
+    }
+
+    const analysis = `
+1. GENERAL OVERVIEW
+
+${result.overview?.impression || "-"}
+
+Communicative Function:
+${result.overview?.communicativeFunction || "-"}
+
+Intended Meaning:
+${result.overview?.intendedMeaning || "-"}
+
+
+2. PRAGMATIC ANALYSIS
+
+Speech Acts:
+${result.pragmaticAnalysis?.speechActs || "-"}
+
+Implicature:
+${result.pragmaticAnalysis?.implicature || "-"}
+
+Presupposition:
+${result.pragmaticAnalysis?.presupposition || "-"}
+
+Linguistic Politeness:
+${result.pragmaticAnalysis?.politeness || "-"}
+
+
+3. CONTEXTUAL APPROPRIATENESS
+
+Brand Fit:
+${result.contextualAppropriateness?.brandFit || "-"}
+
+Audience Fit:
+${result.contextualAppropriateness?.audienceFit || "-"}
+
+Platform Fit:
+${result.contextualAppropriateness?.platformFit || "-"}
+
+Goal Fit:
+${result.contextualAppropriateness?.goalFit || "-"}
+
+
+4. TEXT STRENGTHS
+
+${(result.textStrengths || []).map(item => "- " + item).join("\n")}
+
+
+5. IMPROVEMENT SUGGESTIONS
+
+${(result.improvementSuggestions || []).map(item => "- " + item).join("\n")}
+
+
+6. REVISED TEXT
+
+${result.revisedText?.text || "-"}
+
+Explanation:
+${result.revisedText?.explanation || "-"}
+`;
+
+    return res.status(200).json({
+      analysis,
+      pragmaticHighlights: result.pragmaticHighlights || [],
+      audienceInterpretations: result.audienceInterpretations || [],
+      details: result
+    });
 
   } catch (error) {
-    console.error(error);
+    console.error("Server error:", error);
 
     return res.status(500).json({
       error: "Terjadi kesalahan pada server."
