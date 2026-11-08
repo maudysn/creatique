@@ -540,6 +540,14 @@ result.innerHTML = `
 `;
 
 result.dataset.hasResult = "true";
+
+} catch (error) {
+  result.innerHTML = `
+    <p>${t.error}</p>
+    <p>${escapeHTML(error.message)}</p>
+  `;
+}
+});
       <h2>${t.result}</h2>
       <div class="analysis-content">${escapeHTML(data.analysis).replace(/\n/g, "<br>")}</div>
     `;
