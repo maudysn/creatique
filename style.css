@@ -301,3 +301,136 @@ html[dir="rtl"] #languageSelect {
     padding: 9px 30px 9px 12px;
   }
 }
+/* NEW FEATURES */
+
+.feature-section {
+  margin-top: 40px;
+  padding: 28px;
+  background: #ffffff;
+  border: 1px solid #e9e3ed;
+  border-radius: 18px;
+}
+
+.feature-heading {
+  margin-bottom: 24px;
+}
+
+.feature-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #947ca8;
+  font-weight: 700;
+}
+
+.feature-heading h2 {
+  margin: 10px 0;
+  font-family: "Playfair Display", serif;
+  color: #30283a;
+}
+
+.feature-heading p {
+  color: #77717d;
+  line-height: 1.7;
+}
+
+.highlight-card {
+  border: 1px solid #e8e1ed;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.highlight-card summary {
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  background: #faf8fc;
+}
+
+.highlight-number {
+  background: #e8def1;
+  color: #674c7e;
+  padding: 5px 10px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+.highlight-quote {
+  flex: 1;
+  color: #38313e;
+  font-weight: 600;
+}
+
+.category-badge {
+  background: #eee6f5;
+  color: #765b8c;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+}
+
+.highlight-explanation {
+  padding: 18px;
+  line-height: 1.7;
+}
+
+.highlight-explanation h4 {
+  color: #765b8c;
+  margin-bottom: 5px;
+}
+
+.highlight-explanation p {
+  color: #625c68;
+  margin-bottom: 16px;
+}
+
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.audience-card {
+  padding: 20px;
+  border-radius: 14px;
+  background: #faf8fc;
+  border: 1px solid #ebe4f0;
+}
+
+.audience-card h3 {
+  color: #634c78;
+  margin-bottom: 18px;
+}
+
+.audience-item {
+  margin-bottom: 16px;
+}
+
+.audience-item h4 {
+  font-size: 13px;
+  color: #8c719e;
+  margin-bottom: 5px;
+}
+
+.audience-item p {
+  color: #625c68;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .feature-section {
+    padding: 18px;
+  }
+
+  .audience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .highlight-card summary {
+    align-items: flex-start;
+  }
+    }
