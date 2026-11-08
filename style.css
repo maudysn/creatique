@@ -244,3 +244,60 @@ footer p {
         font-size: 29px;
     }
 }
+/* MULTILINGUAL LANGUAGE SELECTOR */
+
+#languageSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #ffffff;
+  color: #38333d;
+  border: 1px solid #d9cde5;
+  border-radius: 30px;
+  padding: 10px 36px 10px 16px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237b668d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+#languageSelect:hover {
+  border-color: #a88cbd;
+  box-shadow: 0 3px 12px rgba(123, 102, 141, 0.12);
+}
+
+#languageSelect:focus {
+  border-color: #9b7db0;
+  box-shadow: 0 0 0 3px rgba(155, 125, 176, 0.15);
+}
+
+#languageSelect option {
+  background: #ffffff;
+  color: #38333d;
+  padding: 10px;
+}
+
+/* RTL SUPPORT */
+
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="rtl"] #languageSelect {
+  background-position: left 14px center;
+  padding: 10px 16px 10px 36px;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 600px) {
+  #languageSelect {
+    max-width: 155px;
+    font-size: 12px;
+    padding: 9px 30px 9px 12px;
+  }
+}
